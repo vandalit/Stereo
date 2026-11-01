@@ -7,9 +7,8 @@
 ![Status: In Development](https://img.shields.io/badge/status-in%20development-yellow)
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue)
 
-<!-- Screenshot: TODO - Ejecutar `npm run electron`, cargar images de docs/sample-images/, y capturar pantalla -->
-<!-- ![Stereo Player v1](docs/screenshot-player-v1.png) -->
-<!-- *Desktop player with 11-button toolbar and fill-mode canvas* -->
+![Stereo Player v1](docs/screenshot-player-v1.png)
+*Desktop player with 11-button toolbar and fill-mode canvas*
 
 ---
 
