@@ -8,9 +8,10 @@
     "doc": "docs"
   },
   "scripts": {
-    "build": "npm run build:core && npm run build:desktop",
+    "build": "npm run build:core && npm run build:desktop && npm run copy:assets",
     "build:core": "tsc",
     "build:desktop": "tsc -p desktop/tsconfig.json",
+    "copy:assets": "cp desktop/renderer/*.html dist/desktop/renderer/ && cp -r desktop/renderer/styles dist/desktop/renderer/ 2>/dev/null || mkdir -p dist/desktop/renderer/styles && cp desktop/renderer/styles/*.css dist/desktop/renderer/styles/",
     "build:watch": "tsc --watch",
     "test": "jest",
     "test:watch": "jest --watch",
