@@ -147,6 +147,19 @@ body {
   color: #88aaff;
 }
 
+.tb-thumb {
+  opacity: 0.6;
+}
+
+.tb-thumb:hover:not(:disabled) {
+  opacity: 1;
+}
+
+.tb-thumb.active {
+  opacity: 1;
+  border-color: rgba(136, 170, 255, 0.6);
+}
+
 .tb-spacer {
   flex: 1;
 }

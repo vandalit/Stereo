@@ -53,6 +53,13 @@ class PlayerUI {
     // Navigation
     document.getElementById('btnPrev')?.addEventListener('click', () => this.prev());
     document.getElementById('btnNext')?.addEventListener('click', () => this.next());
+    document.getElementById('stopBtn')?.addEventListener('click', () => this.stop());
+
+    // Quick access thumbnails
+    document.getElementById('thumb1')?.addEventListener('click', () => this.jumpTo(0));
+    document.getElementById('thumb2')?.addEventListener('click', () => this.jumpTo(1));
+    document.getElementById('thumb3')?.addEventListener('click', () => this.jumpTo(2));
+    document.getElementById('thumb4')?.addEventListener('click', () => this.jumpTo(3));
 
     // Settings toggle
     this.btnSettings.addEventListener('click', () => {
@@ -262,6 +269,7 @@ class PlayerUI {
   }
 
   updateThumbnails() {
+    // Update sidebar thumbnails
     const thumbs = this.thumbList.querySelectorAll('.thumb-item');
     thumbs.forEach((thumb, index) => {
       if (index === this.currentIndex) {
@@ -270,6 +278,18 @@ class PlayerUI {
         thumb.classList.remove('active');
       }
     });
+    
+    // Update toolbar quick access thumbnails
+    for (let i = 1; i <= 4; i++) {
+      const btn = document.getElementById(`thumb${i}`);
+      if (btn) {
+        if (this.currentIndex === i - 1) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      }
+    }
   }
 }
 
