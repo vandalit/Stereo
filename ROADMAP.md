@@ -24,19 +24,19 @@ Stereo follows a **phased development approach**, building from core functionali
 - ✅ Jest testing framework configured
 - ✅ Timer module (FPS + hold frames) - **20/20 tests passing**
 - ✅ Sequencer module (circular navigation) - **33/33 tests passing**
+- ✅ Loader module (ImageBitmap + buffering) - **29/29 tests passing**
 
 ### In Progress
-- 🔄 Loader module (ImageBitmap preloading)
+- 🔄 Renderer module (Canvas with fill behavior)
 
 ### Upcoming
-- ⏳ Renderer module (Canvas with fill behavior)
 - ⏳ FrameEngine orchestrator (integration layer)
 
 **Target:** Working core that can cycle through images with configurable timing
 
 **Demo:** Reproduce 3+ images at adjustable FPS and hold rates
 
-**Progress:** 2/5 core modules complete (40%)
+**Progress:** 3/5 core modules complete (60%)
 
 ---
 

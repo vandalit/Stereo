@@ -56,8 +56,8 @@ export interface ImageMetadata {
  * Loader configuration
  */
 export interface LoaderConfig {
-  preloadCount: number;
-  maxCacheSize: number;
+  preloadCount: number;  // Number of images to preload ahead
+  maxCacheSize: number;  // Maximum number of images to keep in cache
 }
 
 /**

@@ -19,12 +19,22 @@ global.HTMLCanvasElement = class HTMLCanvasElement {
   }
 } as any;
 
-// Mock createImageBitmap
-global.createImageBitmap = jest.fn().mockResolvedValue({
-  width: 100,
-  height: 100,
-  close: jest.fn()
+// Mock createImageBitmap - returns proper mock with close method
+global.createImageBitmap = jest.fn().mockImplementation(async () => {
+  return {
+    width: 100,
+    height: 100,
+    close: jest.fn()
+  };
 });
+
+// Mock fetch for image loading
+global.fetch = jest.fn().mockImplementation(async (url: string) => {
+  return {
+    ok: true,
+    blob: async () => new Blob(['fake image data'], { type: 'image/png' })
+  };
+}) as any;
 
 // Mock requestAnimationFrame
 let frameId = 0;
