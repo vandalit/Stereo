@@ -166,8 +166,10 @@ body {
 
 /* Slider Popup */
 .slider-popup {
-  position: absolute;
-  bottom: 60px;
+  position: fixed;
+  bottom: 68px;
+  left: 50%;
+  transform: translateX(-50%);
   display: none;
   flex-direction: row;
   align-items: center;
@@ -179,6 +181,20 @@ body {
   border-radius: 6px;
   z-index: 70;
   min-width: 200px;
+}
+
+/* Position FPS popup near its button */
+#fpsPopup {
+  left: auto;
+  right: 180px;
+  transform: none;
+}
+
+/* Position Hold popup near its button */
+#holdPopup {
+  left: auto;
+  right: 120px;
+  transform: none;
 }
 
 .slider-popup.open {
