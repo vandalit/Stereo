@@ -1,4 +1,4 @@
-/* Explorer Styles */
+/* Stereo Explorer - Minimal Style */
 
 * {
   margin: 0;
@@ -7,181 +7,90 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background: #1a1a1a;
-  color: #e0e0e0;
+  font-family: monospace;
+  background: #000;
+  color: rgba(255, 255, 255, 0.7);
   overflow: hidden;
-}
-
-.app {
   display: flex;
   flex-direction: column;
   height: 100vh;
 }
 
-/* Header */
-.header {
+/* Status Bar */
+#statusBar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1.5rem;
-  background: #2a2a2a;
-  border-bottom: 1px solid #3a3a3a;
+  gap: 6px;
+  padding: 10px 12px;
+  background: linear-gradient(rgba(0, 0, 0, 0.7), transparent);
+  pointer-events: none;
+  z-index: 10;
 }
 
-.title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #fff;
+.status-chip {
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  padding: 2px 7px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.4);
 }
 
-.btn-select-folder {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: #4a90e2;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btn-select-folder:hover {
-  background: #357abd;
-}
-
-/* Folder Info */
-.folder-info {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem 1.5rem;
-  background: #252525;
-  border-bottom: 1px solid #3a3a3a;
-}
-
-.folder-path {
-  font-size: 0.875rem;
-  color: #a0a0a0;
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
-}
-
-.image-count {
-  font-size: 0.875rem;
-  color: #4a90e2;
-  font-weight: 500;
-}
-
-/* Controls */
-.controls {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 1rem 1.5rem;
-  background: #2a2a2a;
-  border-bottom: 1px solid #3a3a3a;
-}
-
-.control-group {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.control-group label {
-  font-size: 0.875rem;
-  color: #a0a0a0;
-}
-
-.control-group input {
-  width: 80px;
-  padding: 0.375rem 0.5rem;
-  background: #1a1a1a;
-  border: 1px solid #3a3a3a;
-  border-radius: 4px;
-  color: #e0e0e0;
-  font-size: 0.875rem;
-}
-
-.control-group input:focus {
-  outline: none;
-  border-color: #4a90e2;
-}
-
-.btn-play {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1.25rem;
-  background: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s;
-  margin-left: auto;
-}
-
-.btn-play:hover:not(:disabled) {
-  background: #45a049;
-}
-
-.btn-play:disabled {
-  background: #3a3a3a;
-  color: #666;
-  cursor: not-allowed;
+.status-chip.ok {
+  border-color: rgba(80, 220, 140, 0.4);
+  background: rgba(80, 220, 140, 0.1);
+  color: #7eeaaa;
 }
 
 /* Thumbnail Grid */
-.thumbnail-grid {
+#thumbGrid {
   flex: 1;
   overflow-y: auto;
-  padding: 1.5rem;
+  padding: 12px;
 }
 
-.thumbnail-grid::-webkit-scrollbar {
+#thumbGrid::-webkit-scrollbar {
   width: 8px;
 }
 
-.thumbnail-grid::-webkit-scrollbar-track {
-  background: #1a1a1a;
+#thumbGrid::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.thumbnail-grid::-webkit-scrollbar-thumb {
-  background: #3a3a3a;
+#thumbGrid::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
-}
-
-.thumbnail-grid::-webkit-scrollbar-thumb:hover {
-  background: #4a4a4a;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
 }
 
 .thumbnail {
-  position: relative;
   aspect-ratio: 1;
-  background: #2a2a2a;
-  border: 2px solid #3a3a3a;
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
   overflow: hidden;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 .thumbnail:hover {
-  border-color: #4a90e2;
-  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.thumbnail.selected {
+  border-color: rgba(136, 170, 255, 0.6);
+  background: rgba(136, 170, 255, 0.08);
 }
 
 .thumbnail img {
@@ -195,13 +104,14 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 0.5rem;
-  background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-  font-size: 0.75rem;
-  color: #e0e0e0;
+  padding: 6px 8px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.6);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: 0.03em;
 }
 
 /* Empty State */
@@ -211,14 +121,173 @@ body {
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #666;
+  color: rgba(255, 255, 255, 0.25);
+  gap: 12px;
 }
 
 .empty-state svg {
-  margin-bottom: 1rem;
-  opacity: 0.5;
+  opacity: 0.3;
 }
 
 .empty-state p {
-  font-size: 0.875rem;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+/* Bottom Toolbar */
+#toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: rgba(10, 10, 20, 0.95);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.tb-btn {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.tb-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.tb-btn:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.tb-btn.active {
+  background: rgba(136, 170, 255, 0.15);
+  border-color: rgba(136, 170, 255, 0.4);
+  color: #88aaff;
+}
+
+.tb-btn-primary {
+  background: rgba(80, 220, 140, 0.12);
+  border-color: rgba(80, 220, 140, 0.35);
+  color: #7eeaaa;
+}
+
+.tb-btn-primary:hover:not(:disabled) {
+  background: rgba(80, 220, 140, 0.18);
+  border-color: rgba(80, 220, 140, 0.5);
+}
+
+.tb-btn-primary:disabled {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.6);
+  opacity: 0.25;
+}
+
+.tb-spacer {
+  flex: 1;
+}
+
+/* Settings Panel */
+#settingsPanel {
+  position: fixed;
+  bottom: 60px;
+  right: 12px;
+  width: 220px;
+  background: rgba(10, 10, 20, 0.97);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 7px;
+  z-index: 60;
+  overflow: hidden;
+  display: none;
+}
+
+#settingsPanel.open {
+  display: block;
+}
+
+#settingsHeader {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+#settingsHeader:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+#settingsHeader svg:first-child {
+  color: rgba(180, 170, 255, 0.7);
+}
+
+#settingsLabel {
+  flex: 1;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(180, 170, 255, 0.6);
+}
+
+#settingsChevron {
+  color: rgba(255, 255, 255, 0.25);
+  transition: transform 0.2s;
+}
+
+#settingsPanel.open #settingsChevron {
+  transform: rotate(180deg);
+}
+
+#settingsBody {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 10px 12px 12px;
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#settingsPanel.open #settingsBody {
+  display: flex;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.setting-label {
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.38);
+  width: 40px;
+  flex-shrink: 0;
+}
+
+.setting-row input[type="number"] {
+  flex: 1;
+  font-family: monospace;
+  font-size: 11px;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.setting-row input[type="number"]:focus {
+  outline: none;
+  border-color: rgba(136, 170, 255, 0.4);
+  background: rgba(136, 170, 255, 0.06);
 }

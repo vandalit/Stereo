@@ -3,46 +3,98 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stereo - Player</title>
+  <title>Stereo</title>
   <link rel="stylesheet" href="styles/player.css">
 </head>
 <body>
-  <div class="player">
-    <!-- Canvas -->
-    <canvas id="playerCanvas"></canvas>
+  <!-- Frame Counter -->
+  <div id="frameCounter">
+    <span id="frameInfo">frame 1</span>
+  </div>
 
-    <!-- Overlay Controls (fade on idle) -->
-    <div class="controls-overlay" id="controlsOverlay">
-      <div class="controls">
-        <button class="btn-control" id="playPauseBtn">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor" id="playIcon">
-            <path d="M10 4.8A2 2 0 007 6.4v19.2a2 2 0 003.066 1.698l15.467-9.6a2 2 0 000-3.396L10.066 4.802A2 2 0 0010 4.8z"/>
-          </svg>
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor" id="pauseIcon" style="display: none;">
-            <path d="M10 5a2 2 0 012-2h1a2 2 0 012 2v22a2 2 0 01-2 2h-1a2 2 0 01-2-2V5zM19 5a2 2 0 012-2h1a2 2 0 012 2v22a2 2 0 01-2 2h-1a2 2 0 01-2-2V5z"/>
-          </svg>
-        </button>
+  <!-- Canvas -->
+  <canvas id="playerCanvas"></canvas>
 
-        <button class="btn-control" id="stopBtn">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor">
-            <path d="M8 6a2 2 0 012-2h12a2 2 0 012 2v20a2 2 0 01-2 2H10a2 2 0 01-2-2V6z"/>
-          </svg>
-        </button>
+  <!-- Thumbnails Sidebar -->
+  <div id="thumbSidebar">
+    <div id="thumbList">
+      <!-- Thumbnails populated by JS -->
+    </div>
+  </div>
 
-        <div class="slider-group">
-          <label>FPS: <span id="fpsValue">10</span></label>
-          <input type="range" id="fpsSlider" min="1" max="120" value="10" />
-        </div>
+  <!-- Bottom Toolbar -->
+  <div id="toolbar">
+    <button class="tb-btn" id="btnFolder" title="Select Folder">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+      </svg>
+    </button>
 
-        <div class="slider-group">
-          <label>Hold: <span id="holdValue">1</span></label>
-          <input type="range" id="holdSlider" min="1" max="30" value="1" />
-        </div>
+    <button class="tb-btn" id="btnPrev" title="Previous">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </button>
+
+    <button class="tb-btn" id="playPauseBtn" title="Play/Pause">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="playIcon">
+        <polygon points="5 3 19 12 5 21 5 3"/>
+      </svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="pauseIcon" style="display: none;">
+        <rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>
+      </svg>
+    </button>
+
+    <button class="tb-btn" id="btnNext" title="Next">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 18l6-6-6-6"/>
+      </svg>
+    </button>
+
+    <button class="tb-btn" id="btnRecord" title="Record" disabled>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="8"/>
+      </svg>
+    </button>
+
+    <div class="tb-spacer"></div>
+
+    <button class="tb-btn" id="btnSettings" title="Settings">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.2 4.2l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.2-4.2l4.2-4.2"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Settings Panel (collapsible) -->
+  <div id="settingsPanel">
+    <div id="settingsHeader">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6"/>
+      </svg>
+      <span id="settingsLabel">config</span>
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="settingsChevron">
+        <path d="M6 9l6 6 6-6"/>
+      </svg>
+    </div>
+    <div id="settingsBody">
+      <div class="setting-row">
+        <label class="setting-label">fps</label>
+        <input type="range" id="fpsSlider" min="1" max="120" value="60" />
+        <span class="setting-value" id="fpsValue">60</span>
       </div>
-
-      <div class="info">
-        <div class="frame-info" id="frameInfo">Frame 1 / 1</div>
-        <div class="hint">Press ESC to close | SPACE to play/pause</div>
+      <div class="setting-row">
+        <label class="setting-label">hold</label>
+        <input type="range" id="holdSlider" min="1" max="30" value="6" />
+        <span class="setting-value" id="holdValue">6</span>
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">mode</label>
+        <div class="mode-btns">
+          <button class="mode-btn active" data-mode="fill">fill</button>
+          <button class="mode-btn" data-mode="fit">fit</button>
+          <button class="mode-btn" data-mode="contain">contain</button>
+        </div>
       </div>
     </div>
   </div>

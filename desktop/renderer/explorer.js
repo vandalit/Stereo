@@ -1,32 +1,47 @@
 /**
- * Explorer Renderer Script (Compiled from TypeScript)
+ * Explorer Renderer Script - Minimal UI
  */
 
 class ExplorerUI {
   constructor() {
     this.currentFolder = null;
     this.images = [];
-    this.fps = 10;
-    this.hold = 1;
+    this.fps = 60;
+    this.hold = 6;
 
     // Get DOM elements
-    this.selectFolderBtn = document.getElementById('selectFolderBtn');
-    this.folderPath = document.getElementById('folderPath');
-    this.imageCount = document.getElementById('imageCount');
+    this.btnFolder = document.getElementById('btnFolder');
+    this.btnSettings = document.getElementById('btnSettings');
+    this.playBtn = document.getElementById('playBtn');
+    this.thumbGrid = document.getElementById('thumbGrid');
+    this.folderChip = document.getElementById('folderChip');
+    this.countChip = document.getElementById('countChip');
     this.fpsInput = document.getElementById('fpsInput');
     this.holdInput = document.getElementById('holdInput');
-    this.playBtn = document.getElementById('playBtn');
-    this.thumbnailGrid = document.getElementById('thumbnailGrid');
+    this.settingsPanel = document.getElementById('settingsPanel');
 
     this.setupEventListeners();
   }
 
   setupEventListeners() {
-    this.selectFolderBtn.addEventListener('click', () => this.selectFolder());
+    this.btnFolder.addEventListener('click', () => this.selectFolder());
     this.playBtn.addEventListener('click', () => this.openPlayer());
+    
+    // Settings toggle
+    this.btnSettings.addEventListener('click', () => {
+      this.settingsPanel.classList.toggle('open');
+      this.btnSettings.classList.toggle('active');
+    });
+
+    // Settings header toggle
+    document.getElementById('settingsHeader').addEventListener('click', () => {
+      this.settingsPanel.classList.toggle('open');
+    });
+    
     this.fpsInput.addEventListener('change', () => {
       this.fps = parseInt(this.fpsInput.value, 10);
     });
+    
     this.holdInput.addEventListener('change', () => {
       this.hold = parseInt(this.holdInput.value, 10);
     });
@@ -46,9 +61,15 @@ class ExplorerUI {
 
     this.images = await window.stereoAPI.loadImages(this.currentFolder);
 
-    // Update UI
-    this.folderPath.textContent = this.currentFolder;
-    this.imageCount.textContent = `${this.images.length} image${this.images.length !== 1 ? 's' : ''}`;
+    // Update status chips
+    const folderName = this.currentFolder.split('/').pop() || this.currentFolder;
+    this.folderChip.textContent = folderName;
+    this.countChip.textContent = `${this.images.length} image${this.images.length !== 1 ? 's' : ''}`;
+    
+    if (this.images.length > 0) {
+      this.folderChip.classList.add('ok');
+      this.countChip.classList.add('ok');
+    }
 
     // Enable play button if we have images
     this.playBtn.disabled = this.images.length === 0;
@@ -59,14 +80,14 @@ class ExplorerUI {
 
   renderThumbnails() {
     if (this.images.length === 0) {
-      this.thumbnailGrid.innerHTML = `
+      this.thumbGrid.innerHTML = `
         <div class="empty-state">
-          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="8" y="12" width="48" height="40" rx="2"/>
-            <path d="M8 40l12-12 8 8 12-12 8 8"/>
-            <circle cx="44" cy="24" r="3"/>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="M21 15l-5-5L5 21"/>
           </svg>
-          <p>No images found in this folder</p>
+          <p>no images found</p>
         </div>
       `;
       return;
@@ -89,11 +110,18 @@ class ExplorerUI {
       
       thumbnail.appendChild(img);
       thumbnail.appendChild(name);
+      
+      // Optional: click to select
+      thumbnail.addEventListener('click', () => {
+        document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('selected'));
+        thumbnail.classList.add('selected');
+      });
+      
       grid.appendChild(thumbnail);
     }
 
-    this.thumbnailGrid.innerHTML = '';
-    this.thumbnailGrid.appendChild(grid);
+    this.thumbGrid.innerHTML = '';
+    this.thumbGrid.appendChild(grid);
   }
 
   async openPlayer() {

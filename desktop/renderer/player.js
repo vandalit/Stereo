@@ -1,7 +1,5 @@
 /**
- * Player Renderer Script (Simplified)
- * Note: This would normally import FrameEngine from dist/core
- * For now, using placeholder until proper bundling is set up
+ * Player Renderer Script - Minimal UI
  */
 
 class PlayerUI {
@@ -9,35 +7,32 @@ class PlayerUI {
     this.engine = null;
     this.images = [];
     this.isPlaying = false;
-    this.idleTimeout = null;
     this.currentMode = 'fill';
     this.currentIndex = 0;
 
     // Get DOM elements
     this.canvas = document.getElementById('playerCanvas');
-    this.controlsOverlay = document.getElementById('controlsOverlay');
+    this.frameInfo = document.getElementById('frameInfo');
     this.playPauseBtn = document.getElementById('playPauseBtn');
-    this.stopBtn = document.getElementById('stopBtn');
+    this.playIcon = document.getElementById('playIcon');
+    this.pauseIcon = document.getElementById('pauseIcon');
     this.fpsSlider = document.getElementById('fpsSlider');
     this.holdSlider = document.getElementById('holdSlider');
     this.fpsValue = document.getElementById('fpsValue');
     this.holdValue = document.getElementById('holdValue');
-    this.frameInfo = document.getElementById('frameInfo');
-    this.playIcon = document.getElementById('playIcon');
-    this.pauseIcon = document.getElementById('pauseIcon');
+    this.settingsPanel = document.getElementById('settingsPanel');
+    this.btnSettings = document.getElementById('btnSettings');
+    this.thumbList = document.getElementById('thumbList');
 
     this.setupCanvas();
     this.setupEventListeners();
     this.setupIPC();
-    this.startIdleTimer();
   }
 
   setupCanvas() {
-    // Match canvas to window size
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
 
-    // Handle resize
     window.addEventListener('resize', () => {
       this.canvas.width = window.innerWidth;
       this.canvas.height = window.innerHeight;
@@ -46,7 +41,7 @@ class PlayerUI {
   }
 
   setupEventListeners() {
-    // Play/Pause button
+    // Play/Pause
     this.playPauseBtn.addEventListener('click', () => {
       if (this.isPlaying) {
         this.pause();
@@ -55,10 +50,19 @@ class PlayerUI {
       }
     });
 
-    // Stop button
-    this.stopBtn.addEventListener('click', () => {
-      this.stop();
-      window.stereoAPI.closePlayer();
+    // Navigation
+    document.getElementById('btnPrev')?.addEventListener('click', () => this.prev());
+    document.getElementById('btnNext')?.addEventListener('click', () => this.next());
+
+    // Settings toggle
+    this.btnSettings.addEventListener('click', () => {
+      this.settingsPanel.classList.toggle('open');
+      this.btnSettings.classList.toggle('active');
+    });
+
+    // Settings header toggle
+    document.getElementById('settingsHeader').addEventListener('click', () => {
+      this.settingsPanel.classList.toggle('open');
     });
 
     // FPS slider
@@ -75,11 +79,14 @@ class PlayerUI {
       // TODO: Update engine hold
     });
 
-    // Mouse movement - show controls
-    document.addEventListener('mousemove', () => {
-      this.showControls();
-      document.body.classList.add('show-cursor');
-      this.resetIdleTimer();
+    // Mode buttons
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.currentMode = btn.dataset.mode;
+        // TODO: Update engine render mode
+      });
     });
 
     // Keyboard shortcuts
@@ -92,8 +99,11 @@ class PlayerUI {
           this.play();
         }
       } else if (e.key === 'Escape') {
-        this.stop();
         window.stereoAPI.closePlayer();
+      } else if (e.key === 'ArrowLeft') {
+        this.prev();
+      } else if (e.key === 'ArrowRight') {
+        this.next();
       }
     });
   }
@@ -104,7 +114,6 @@ class PlayerUI {
       this.loadImages(images);
     });
 
-    // Listen for control messages
     window.stereoAPI.on('player:play', () => this.play());
     window.stereoAPI.on('player:pause', () => this.pause());
     window.stereoAPI.on('player:stop', () => this.stop());
@@ -122,13 +131,39 @@ class PlayerUI {
     this.currentIndex = 0;
     
     console.log('Loaded images:', images.length);
-    this.updateFrameInfo(1, images.length);
-    
-    // Render first frame
+    this.updateFrameInfo();
+    this.renderThumbnails();
     this.render();
     
     // Auto-play
     this.play();
+  }
+
+  renderThumbnails() {
+    this.thumbList.innerHTML = '';
+    
+    this.images.forEach((imgPath, index) => {
+      const thumb = document.createElement('div');
+      thumb.className = 'thumb-item';
+      if (index === this.currentIndex) {
+        thumb.classList.add('active');
+      }
+      
+      // Placeholder icon for now
+      thumb.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <path d="M21 15l-5-5L5 21"/>
+        </svg>
+      `;
+      
+      thumb.addEventListener('click', () => {
+        this.jumpTo(index);
+      });
+      
+      this.thumbList.appendChild(thumb);
+    });
   }
 
   play() {
@@ -136,25 +171,60 @@ class PlayerUI {
 
     this.isPlaying = true;
     this.updatePlayPauseButton();
+    console.log('Playing...');
     
     // TODO: Implement proper frame engine playback
-    console.log('Playing...');
+    // For now, simple interval
+    this.playInterval = setInterval(() => {
+      this.next();
+    }, 1000 / parseInt(this.fpsSlider.value) * parseInt(this.holdSlider.value));
   }
 
   pause() {
     if (!this.isPlaying) return;
 
     this.isPlaying = false;
+    if (this.playInterval) {
+      clearInterval(this.playInterval);
+    }
     this.updatePlayPauseButton();
     console.log('Paused');
   }
 
   stop() {
     this.isPlaying = false;
+    if (this.playInterval) {
+      clearInterval(this.playInterval);
+    }
     this.currentIndex = 0;
     this.updatePlayPauseButton();
+    this.updateFrameInfo();
     this.render();
     console.log('Stopped');
+  }
+
+  next() {
+    if (this.images.length === 0) return;
+    this.currentIndex = (this.currentIndex + 1) % this.images.length;
+    this.updateFrameInfo();
+    this.updateThumbnails();
+    this.render();
+  }
+
+  prev() {
+    if (this.images.length === 0) return;
+    this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+    this.updateFrameInfo();
+    this.updateThumbnails();
+    this.render();
+  }
+
+  jumpTo(index) {
+    if (index < 0 || index >= this.images.length) return;
+    this.currentIndex = index;
+    this.updateFrameInfo();
+    this.updateThumbnails();
+    this.render();
   }
 
   render() {
@@ -164,48 +234,42 @@ class PlayerUI {
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-    // TODO: Load and render image from this.images[this.currentIndex]
-    ctx.fillStyle = '#fff';
-    ctx.font = '24px sans-serif';
+    // TODO: Load and render actual image
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.font = '12px monospace';
     ctx.textAlign = 'center';
-    ctx.fillText(`Frame ${this.currentIndex + 1} / ${this.images.length}`, 
-                 this.canvas.width / 2, this.canvas.height / 2);
+    ctx.fillText(
+      `Image ${this.currentIndex + 1} / ${this.images.length}`, 
+      this.canvas.width / 2, 
+      this.canvas.height / 2
+    );
   }
 
   updatePlayPauseButton() {
     if (this.isPlaying) {
       this.playIcon.style.display = 'none';
       this.pauseIcon.style.display = 'block';
+      this.playPauseBtn.classList.add('active');
     } else {
       this.playIcon.style.display = 'block';
       this.pauseIcon.style.display = 'none';
+      this.playPauseBtn.classList.remove('active');
     }
   }
 
-  updateFrameInfo(current, total) {
-    this.frameInfo.textContent = `Frame ${current} / ${total}`;
+  updateFrameInfo() {
+    this.frameInfo.textContent = `frame ${this.currentIndex + 1}`;
   }
 
-  showControls() {
-    this.controlsOverlay.classList.remove('hidden');
-  }
-
-  hideControls() {
-    this.controlsOverlay.classList.add('hidden');
-  }
-
-  startIdleTimer() {
-    this.idleTimeout = setTimeout(() => {
-      this.hideControls();
-      document.body.classList.remove('show-cursor');
-    }, 3000);
-  }
-
-  resetIdleTimer() {
-    if (this.idleTimeout !== null) {
-      clearTimeout(this.idleTimeout);
-    }
-    this.startIdleTimer();
+  updateThumbnails() {
+    const thumbs = this.thumbList.querySelectorAll('.thumb-item');
+    thumbs.forEach((thumb, index) => {
+      if (index === this.currentIndex) {
+        thumb.classList.add('active');
+      } else {
+        thumb.classList.remove('active');
+      }
+    });
   }
 }
 

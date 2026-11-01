@@ -3,55 +3,70 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stereo - Explorer</title>
+  <title>Stereo</title>
   <link rel="stylesheet" href="styles/explorer.css">
 </head>
 <body>
-  <div class="app">
-    <!-- Header -->
-    <header class="header">
-      <h1 class="title">Stereo Explorer</h1>
-      <button class="btn-select-folder" id="selectFolderBtn">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M2 4a2 2 0 012-2h4.586a1 1 0 01.707.293l1.414 1.414a1 1 0 00.707.293H16a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V4z"/>
-        </svg>
-        Select Folder
-      </button>
-    </header>
+  <!-- Status Bar -->
+  <div id="statusBar">
+    <span class="status-chip" id="folderChip">no folder</span>
+    <span class="status-chip" id="countChip">0 images</span>
+  </div>
 
-    <!-- Folder Info -->
-    <div class="folder-info" id="folderInfo">
-      <div class="folder-path" id="folderPath">No folder selected</div>
-      <div class="image-count" id="imageCount">0 images</div>
+  <!-- Thumbnail Grid -->
+  <div id="thumbGrid">
+    <div class="empty-state">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="3" y="3" width="18" height="18" rx="2"/>
+        <circle cx="8.5" cy="8.5" r="1.5"/>
+        <path d="M21 15l-5-5L5 21"/>
+      </svg>
+      <p>select folder to begin</p>
     </div>
+  </div>
 
-    <!-- Controls -->
-    <div class="controls">
-      <div class="control-group">
-        <label for="fpsInput">FPS:</label>
-        <input type="number" id="fpsInput" min="1" max="240" value="10" />
-      </div>
-      <div class="control-group">
-        <label for="holdInput">Hold Frames:</label>
-        <input type="number" id="holdInput" min="1" max="60" value="1" />
-      </div>
-      <button class="btn-play" id="playBtn" disabled>
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
-        </svg>
-        Play
-      </button>
+  <!-- Bottom Toolbar -->
+  <div id="toolbar">
+    <button class="tb-btn" id="btnFolder" title="Select Folder">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+      </svg>
+    </button>
+
+    <div class="tb-spacer"></div>
+
+    <button class="tb-btn" id="btnSettings" title="Settings">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.2 4.2l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.2-4.2l4.2-4.2"/>
+      </svg>
+    </button>
+
+    <button class="tb-btn tb-btn-primary" id="playBtn" disabled title="Play">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="5 3 19 12 5 21 5 3"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Settings Panel -->
+  <div id="settingsPanel">
+    <div id="settingsHeader">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+      <span id="settingsLabel">config</span>
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="settingsChevron">
+        <path d="M6 9l6 6 6-6"/>
+      </svg>
     </div>
-
-    <!-- Thumbnail Grid -->
-    <div class="thumbnail-grid" id="thumbnailGrid">
-      <div class="empty-state">
-        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="8" y="12" width="48" height="40" rx="2"/>
-          <path d="M8 40l12-12 8 8 12-12 8 8"/>
-          <circle cx="44" cy="24" r="3"/>
-        </svg>
-        <p>Select a folder to view images</p>
+    <div id="settingsBody">
+      <div class="setting-row">
+        <label class="setting-label">fps</label>
+        <input type="number" id="fpsInput" min="1" max="240" value="60" />
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">hold</label>
+        <input type="number" id="holdInput" min="1" max="60" value="6" />
       </div>
     </div>
   </div>
