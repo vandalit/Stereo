@@ -8,7 +8,9 @@
 
 Stereo follows a **phased development approach**, building from core functionality to advanced features. Each phase delivers a working, testable increment.
 
-**Current Status:** 🚧 Phase 2 - Desktop Application (70% complete)
+**Current Status:** 🚧 Phase 2 - Desktop Application (80% complete)
+
+**Next:** Color & control enhancement (vibrant acids, custom sliders)
 
 ---
 
@@ -56,14 +58,22 @@ Stereo follows a **phased development approach**, building from core functionali
 - ✅ Global shortcuts (Space, Escape, Ctrl+Q)
 - ✅ TypeScript compilation setup
 - ✅ Build scripts configured
+- ✅ Asset copying to dist (HTML/CSS)
+- ✅ Minimal UI redesign (Metamedia style)
+- ✅ Bottom toolbar with all controls
+- ✅ Right sidebar thumbnails
+- ✅ Inline FPS/Hold sliders
+- ✅ Working Explorer window
+- ✅ Working Player window (functional)
 
 ### In Progress 🚧
+- 🚧 UI enhancement (vibrant colors, custom sliders)
 - 🚧 Player integration with FrameEngine (needs bundling)
 - 🚧 Image thumbnail generation
 - 🚧 Settings persistence
 
 ### Pending
-- Settings panel (order, ratios, presets)
+- Settings panel polish
 - State management between modes
 - Full integration testing
 
@@ -71,7 +81,7 @@ Stereo follows a **phased development approach**, building from core functionali
 
 **Demo:** Navigate local folders, preview thumbnails, play sequences with live FPS/hold adjustments
 
-**Progress:** 7/10 tasks complete (**70%** ⏳)
+**Progress:** 8/11 core tasks complete (**80%** 🚧)
 
 ---
 
