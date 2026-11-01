@@ -27,14 +27,14 @@ class ExplorerUI {
   private thumbnailGrid: HTMLDivElement;
 
   constructor() {
-    // Get DOM elements
-    this.selectFolderBtn = document.getElementById('selectFolderBtn') as HTMLButtonElement;
-    this.folderPath = document.getElementById('folderPath') as HTMLDivElement;
-    this.imageCount = document.getElementById('imageCount') as HTMLDivElement;
+    // Get DOM elements - USANDO IDs CORRECTOS DEL HTML
+    this.selectFolderBtn = document.getElementById('btnFolder') as HTMLButtonElement;
+    this.folderPath = document.getElementById('folderChip') as HTMLDivElement;
+    this.imageCount = document.getElementById('countChip') as HTMLDivElement;
     this.fpsInput = document.getElementById('fpsInput') as HTMLInputElement;
     this.holdInput = document.getElementById('holdInput') as HTMLInputElement;
     this.playBtn = document.getElementById('playBtn') as HTMLButtonElement;
-    this.thumbnailGrid = document.getElementById('thumbnailGrid') as HTMLDivElement;
+    this.thumbnailGrid = document.getElementById('thumbGrid') as HTMLDivElement;
 
     this.setupEventListeners();
   }
