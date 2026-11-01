@@ -7,13 +7,21 @@
   <link rel="stylesheet" href="styles/explorer.css">
 </head>
 <body>
+  <!-- Canvas (oculto hasta que hay imágenes) -->
+  <canvas id="playerCanvas" style="display: none;"></canvas>
+  
+  <!-- Frame Counter (oculto hasta que hay imágenes) -->
+  <div id="frameCounter" style="display: none;">
+    <span id="frameInfo">frame 1</span>
+  </div>
+
   <!-- Status Bar -->
   <div id="statusBar">
     <span class="status-chip" id="folderChip">no folder</span>
     <span class="status-chip" id="countChip">0 images</span>
   </div>
 
-  <!-- Thumbnail Grid -->
+  <!-- Thumbnail Grid (visible cuando no hay player activo) -->
   <div id="thumbGrid">
     <div class="empty-state">
       <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -25,8 +33,8 @@
     </div>
   </div>
 
-  <!-- Bottom Toolbar -->
-  <div id="toolbar">
+  <!-- Bottom Toolbar (modo explorer: 3 botones) -->
+  <div id="toolbar" class="toolbar-explorer">
     <button class="tb-btn" id="btnFolder" title="Select Folder">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
@@ -42,8 +50,43 @@
     </button>
 
     <button class="tb-btn tb-btn-primary" id="playBtn" disabled title="Play">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="playIcon">
         <polygon points="5 3 19 12 5 21 5 3"/>
+      </svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="pauseIcon" style="display: none;">
+        <rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>
+      </svg>
+    </button>
+    
+    <!-- Botones adicionales del player (ocultos inicialmente) -->
+    <button class="tb-btn player-only" id="btnPrev" title="Previous" style="display: none;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </button>
+
+    <button class="tb-btn player-only" id="btnNext" title="Next" style="display: none;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 18l6-6-6-6"/>
+      </svg>
+    </button>
+
+    <button class="tb-btn player-only" id="stopBtn" title="Stop" style="display: none;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="6" y="6" width="12" height="12"/>
+      </svg>
+    </button>
+
+    <button class="tb-btn player-only" id="btnFps" title="FPS" style="display: none;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+      </svg>
+    </button>
+
+    <button class="tb-btn player-only" id="btnHold" title="Hold" style="display: none;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 6v6l4 2"/>
       </svg>
     </button>
   </div>
