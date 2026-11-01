@@ -1,136 +1,121 @@
-/**
- * Explorer Renderer Script
- * 
- * UI for browsing folders and loading images
- */
+import { FrameEngine } from '../../core/FrameEngine';
+import type { RenderMode } from '../../core/types';
 
-interface ImageFile {
-  path: string;
-  name: string;
-  size: number;
-  modified: Date;
-}
+interface ImageFile { path: string; name: string; size: number; modified: Date; }
 
-class ExplorerUI {
+class UnifiedUI {
   private currentFolder: string | null = null;
   private images: ImageFile[] = [];
-  private fps: number = 10;
-  private hold: number = 1;
-
-  // DOM elements
-  private selectFolderBtn: HTMLButtonElement;
-  private folderPath: HTMLDivElement;
-  private imageCount: HTMLDivElement;
+  private fps = 60;
+  private hold = 6;
+  private mode: RenderMode = 'fill';
+  private isPlaying = false;
+  private engine: FrameEngine | null = null;
+  
+  // Explorer DOM
+  private btnFolder: HTMLButtonElement;
+  private folderChip: HTMLDivElement;
+  private countChip: HTMLDivElement;
   private fpsInput: HTMLInputElement;
   private holdInput: HTMLInputElement;
   private playBtn: HTMLButtonElement;
-  private thumbnailGrid: HTMLDivElement;
+  private thumbGrid: HTMLDivElement;
+  private statusBar: HTMLElement;
+  
+  // Player DOM
+  private canvas: HTMLCanvasElement;
+  private frameCounter: HTMLElement;
+  private frameInfo: HTMLElement;
+  private btnPrev: HTMLButtonElement;
+  private btnNext: HTMLButtonElement;
+  private stopBtn: HTMLButtonElement;
+  private playIcon: SVGElement;
+  private pauseIcon: SVGElement;
 
   constructor() {
-    // Get DOM elements - USANDO IDs CORRECTOS DEL HTML
-    this.selectFolderBtn = document.getElementById('btnFolder') as HTMLButtonElement;
-    this.folderPath = document.getElementById('folderChip') as HTMLDivElement;
-    this.imageCount = document.getElementById('countChip') as HTMLDivElement;
+    this.btnFolder = document.getElementById('btnFolder') as HTMLButtonElement;
+    this.folderChip = document.getElementById('folderChip') as HTMLDivElement;
+    this.countChip = document.getElementById('countChip') as HTMLDivElement;
     this.fpsInput = document.getElementById('fpsInput') as HTMLInputElement;
     this.holdInput = document.getElementById('holdInput') as HTMLInputElement;
     this.playBtn = document.getElementById('playBtn') as HTMLButtonElement;
-    this.thumbnailGrid = document.getElementById('thumbGrid') as HTMLDivElement;
+    this.thumbGrid = document.getElementById('thumbGrid') as HTMLDivElement;
+    this.statusBar = document.getElementById('statusBar')!;
+    this.canvas = document.getElementById('playerCanvas') as HTMLCanvasElement;
+    this.frameCounter = document.getElementById('frameCounter')!;
+    this.frameInfo = document.getElementById('frameInfo')!;
+    this.btnPrev = document.getElementById('btnPrev') as HTMLButtonElement;
+    this.btnNext = document.getElementById('btnNext') as HTMLButtonElement;
+    this.stopBtn = document.getElementById('stopBtn') as HTMLButtonElement;
+    this.playIcon = document.getElementById('playIcon') as any;
+    this.pauseIcon = document.getElementById('pauseIcon') as any;
 
-    this.setupEventListeners();
+    this.btnFolder.addEventListener('click', () => this.selectFolder());
+    this.playBtn.addEventListener('click', () => this.togglePlay());
+    this.stopBtn?.addEventListener('click', () => this.stopPlayer());
+    this.btnPrev?.addEventListener('click', () => this.engine?.prev());
+    this.btnNext?.addEventListener('click', () => this.engine?.next());
   }
 
-  private setupEventListeners(): void {
-    this.selectFolderBtn.addEventListener('click', () => this.selectFolder());
-    this.playBtn.addEventListener('click', () => this.openPlayer());
-    this.fpsInput.addEventListener('change', () => {
-      this.fps = parseInt(this.fpsInput.value, 10);
-    });
-    this.holdInput.addEventListener('change', () => {
-      this.hold = parseInt(this.holdInput.value, 10);
-    });
-  }
-
-  private async selectFolder(): Promise<void> {
-    const folderPath = await window.stereoAPI.selectFolder();
-    
-    if (!folderPath) return;
-
-    this.currentFolder = folderPath;
-    await this.loadImages();
-  }
-
-  private async loadImages(): Promise<void> {
-    if (!this.currentFolder) return;
-
-    this.images = await window.stereoAPI.loadImages(this.currentFolder);
-
-    // Update UI
-    this.folderPath.textContent = this.currentFolder;
-    this.imageCount.textContent = `${this.images.length} image${this.images.length !== 1 ? 's' : ''}`;
-
-    // Enable play button if we have images
+  private async selectFolder() {
+    const path = await window.stereoAPI.selectFolder();
+    if (!path) return;
+    this.currentFolder = path;
+    this.images = await window.stereoAPI.loadImages(path);
+    this.folderChip.textContent = path.split('/').pop() || path;
+    this.countChip.textContent = `${this.images.length} images`;
     this.playBtn.disabled = this.images.length === 0;
-
-    // Render thumbnails
-    this.renderThumbnails();
   }
 
-  private renderThumbnails(): void {
-    if (this.images.length === 0) {
-      this.thumbnailGrid.innerHTML = `
-        <div class="empty-state">
-          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="8" y="12" width="48" height="40" rx="2"/>
-            <path d="M8 40l12-12 8 8 12-12 8 8"/>
-            <circle cx="44" cy="24" r="3"/>
-          </svg>
-          <p>No images found in this folder</p>
-        </div>
-      `;
-      return;
+  private async togglePlay() {
+    if (this.canvas.style.display === 'none') {
+      await this.startPlayer();
+    } else {
+      this.isPlaying ? this.engine?.pause() : await this.engine?.play();
+      this.isPlaying = !this.isPlaying;
+      this.updateIcon();
     }
-
-    const grid = document.createElement('div');
-    grid.className = 'grid';
-
-    for (const image of this.images) {
-      const thumbnail = document.createElement('div');
-      thumbnail.className = 'thumbnail';
-      
-      const img = document.createElement('img');
-      img.src = `file://${image.path}`;
-      img.alt = image.name;
-      
-      const name = document.createElement('div');
-      name.className = 'thumbnail-name';
-      name.textContent = image.name;
-      
-      thumbnail.appendChild(img);
-      thumbnail.appendChild(name);
-      grid.appendChild(thumbnail);
-    }
-
-    this.thumbnailGrid.innerHTML = '';
-    this.thumbnailGrid.appendChild(grid);
   }
 
-  private async openPlayer(): Promise<void> {
-    if (this.images.length === 0) return;
-
-    const imagePaths = this.images.map(img => img.path);
+  private async startPlayer() {
+    this.thumbGrid.style.display = 'none';
+    this.statusBar.style.display = 'none';
+    this.canvas.style.display = 'block';
+    this.frameCounter.style.display = 'block';
+    document.querySelectorAll('.player-only').forEach(el => (el as HTMLElement).style.display = 'flex');
     
-    // Store settings
-    window.stereoAPI.setFps(this.fps);
-    window.stereoAPI.setHold(this.hold);
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight - 56;
+    
+    const urls = this.images.map(img => img.path.startsWith('file://') ? img.path : `file://${img.path}`);
+    this.engine = new FrameEngine(this.canvas, { fps: this.fps, hold: this.hold, mode: this.mode, preloadCount: 3, maxCacheSize: this.images.length });
+    this.engine.on('framechange', ({ index, total }) => { this.frameInfo.textContent = `frame ${index + 1} / ${total}`; });
+    await this.engine.loadSequence(urls);
+    await this.engine.play();
+    this.isPlaying = true;
+    this.updateIcon();
+  }
 
-    // Open player window
-    await window.stereoAPI.openPlayer(imagePaths);
+  private stopPlayer() {
+    this.engine?.stop();
+    this.engine = null;
+    this.isPlaying = false;
+    this.canvas.style.display = 'none';
+    this.frameCounter.style.display = 'none';
+    document.querySelectorAll('.player-only').forEach(el => (el as HTMLElement).style.display = 'none');
+    this.thumbGrid.style.display = 'flex';
+    this.statusBar.style.display = 'flex';
+    this.updateIcon();
+  }
+
+  private updateIcon() {
+    this.playIcon.style.display = this.isPlaying ? 'none' : 'block';
+    this.pauseIcon.style.display = this.isPlaying ? 'block' : 'none';
   }
 }
 
-// Initialize when DOM is ready
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => new ExplorerUI());
+  document.addEventListener('DOMContentLoaded', () => new UnifiedUI());
 } else {
-  new ExplorerUI();
+  new UnifiedUI();
 }
