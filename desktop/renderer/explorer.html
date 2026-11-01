@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stereo - Explorer</title>
+  <link rel="stylesheet" href="styles/explorer.css">
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <h1 class="title">Stereo Explorer</h1>
+      <button class="btn-select-folder" id="selectFolderBtn">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M2 4a2 2 0 012-2h4.586a1 1 0 01.707.293l1.414 1.414a1 1 0 00.707.293H16a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V4z"/>
+        </svg>
+        Select Folder
+      </button>
+    </header>
+
+    <!-- Folder Info -->
+    <div class="folder-info" id="folderInfo">
+      <div class="folder-path" id="folderPath">No folder selected</div>
+      <div class="image-count" id="imageCount">0 images</div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <div class="control-group">
+        <label for="fpsInput">FPS:</label>
+        <input type="number" id="fpsInput" min="1" max="240" value="10" />
+      </div>
+      <div class="control-group">
+        <label for="holdInput">Hold Frames:</label>
+        <input type="number" id="holdInput" min="1" max="60" value="1" />
+      </div>
+      <button class="btn-play" id="playBtn" disabled>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+        </svg>
+        Play
+      </button>
+    </div>
+
+    <!-- Thumbnail Grid -->
+    <div class="thumbnail-grid" id="thumbnailGrid">
+      <div class="empty-state">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="8" y="12" width="48" height="40" rx="2"/>
+          <path d="M8 40l12-12 8 8 12-12 8 8"/>
+          <circle cx="44" cy="24" r="3"/>
+        </svg>
+        <p>Select a folder to view images</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="explorer.js"></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stereo - Player</title>
+  <link rel="stylesheet" href="styles/player.css">
+</head>
+<body>
+  <div class="player">
+    <!-- Canvas -->
+    <canvas id="playerCanvas"></canvas>
+
+    <!-- Overlay Controls (fade on idle) -->
+    <div class="controls-overlay" id="controlsOverlay">
+      <div class="controls">
+        <button class="btn-control" id="playPauseBtn">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor" id="playIcon">
+            <path d="M10 4.8A2 2 0 007 6.4v19.2a2 2 0 003.066 1.698l15.467-9.6a2 2 0 000-3.396L10.066 4.802A2 2 0 0010 4.8z"/>
+          </svg>
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor" id="pauseIcon" style="display: none;">
+            <path d="M10 5a2 2 0 012-2h1a2 2 0 012 2v22a2 2 0 01-2 2h-1a2 2 0 01-2-2V5zM19 5a2 2 0 012-2h1a2 2 0 012 2v22a2 2 0 01-2 2h-1a2 2 0 01-2-2V5z"/>
+          </svg>
+        </button>
+
+        <button class="btn-control" id="stopBtn">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor">
+            <path d="M8 6a2 2 0 012-2h12a2 2 0 012 2v20a2 2 0 01-2 2H10a2 2 0 01-2-2V6z"/>
+          </svg>
+        </button>
+
+        <div class="slider-group">
+          <label>FPS: <span id="fpsValue">10</span></label>
+          <input type="range" id="fpsSlider" min="1" max="120" value="10" />
+        </div>
+
+        <div class="slider-group">
+          <label>Hold: <span id="holdValue">1</span></label>
+          <input type="range" id="holdSlider" min="1" max="30" value="1" />
+        </div>
+      </div>
+
+      <div class="info">
+        <div class="frame-info" id="frameInfo">Frame 1 / 1</div>
+        <div class="hint">Press ESC to close | SPACE to play/pause</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="player.js"></script>
+</body>
+</html>

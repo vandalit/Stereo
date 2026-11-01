@@ -2,20 +2,28 @@
   "name": "stereo",
   "version": "0.1.0",
   "description": "High-performance visual frame player for stereoscopy, sprite animation, and experimental VFX",
-  "main": "dist/core/index.js",
+  "main": "dist/desktop/main/index.js",
   "types": "dist/core/index.d.ts",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "npm run build:core && npm run build:desktop",
+    "build:core": "tsc",
+    "build:desktop": "tsc -p desktop/tsconfig.json",
     "build:watch": "tsc --watch",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "lint": "echo 'ESLint not configured yet'",
     "typecheck": "tsc --noEmit",
-    "demo": "node demo/serve.js"
+    "demo": "node demo/serve.js",
+    "electron": "npm run build && electron .",
+    "electron:dev": "NODE_ENV=development npm run build && electron .",
+    "dist": "npm run build && electron-builder",
+    "dist:linux": "npm run build && electron-builder --linux",
+    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:win": "npm run build && electron-builder --win"
   },
   "keywords": [
     "stereoscopy",
@@ -36,6 +44,8 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@types/jest": "^30.0.0",
     "@types/node": "^26.6.6",
+    "electron": "^41.7.1",
+    "electron-builder": "^26.18.0",
     "jest": "^30.5.2",
     "jest-environment-jsdom": "^30.5.2",
     "ts-jest": "^29.4.15",
@@ -43,5 +53,29 @@
   },
   "dependencies": {
     "eventemitter3": "^5.0.4"
+  },
+  "build": {
+    "appId": "com.vandalit.stereo",
+    "productName": "Stereo",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "desktop/renderer/**/*.html",
+      "desktop/renderer/**/*.css",
+      "package.json"
+    ],
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "category": "Graphics"
+    },
+    "mac": {
+      "target": ["dmg", "zip"],
+      "category": "public.app-category.graphics-design"
+    },
+    "win": {
+      "target": ["nsis", "portable"]
+    }
   }
 }

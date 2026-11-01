@@ -25,7 +25,7 @@ const server = http.createServer((req, res) => {
   console.log(`${req.method} ${req.url}`);
 
   // Parse URL
-  let filePath = req.url === '/' ? '/index.html' : req.url;
+  let filePath = req.url === '/' ? '/demo/index.html' : req.url;
   
   // Map core modules to dist
   if (filePath.startsWith('/core/')) {

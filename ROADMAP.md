@@ -8,7 +8,7 @@
 
 Stereo follows a **phased development approach**, building from core functionality to advanced features. Each phase delivers a working, testable increment.
 
-**Current Status:** 🚧 Phase 1 - Core Engine Development
+**Current Status:** 🚧 Phase 2 - Desktop Application (70% complete)
 
 ---
 
@@ -46,17 +46,32 @@ Stereo follows a **phased development approach**, building from core functionali
 
 **Goal:** Electron app with Explorer and Player modes
 
-### Tasks
-- Electron boilerplate with IPC
-- Filesystem module (read folders, sort images)
-- Explorer UI (thumbnail grid + navigation)
-- Player UI (canvas + minimal controls)
+### Completed ✅
+- ✅ Electron dependencies installed (electron, electron-builder)
+- ✅ Main process structure (index.ts, windows.ts, filesystem.ts)
+- ✅ Preload script with IPC bridge
+- ✅ Explorer UI (HTML + CSS + JS)
+- ✅ Player UI (HTML + CSS + JS)
+- ✅ Window management system
+- ✅ Global shortcuts (Space, Escape, Ctrl+Q)
+- ✅ TypeScript compilation setup
+- ✅ Build scripts configured
+
+### In Progress 🚧
+- 🚧 Player integration with FrameEngine (needs bundling)
+- 🚧 Image thumbnail generation
+- 🚧 Settings persistence
+
+### Pending
 - Settings panel (order, ratios, presets)
 - State management between modes
+- Full integration testing
 
 **Target:** Fully functional desktop app for browsing and playing image sequences
 
 **Demo:** Navigate local folders, preview thumbnails, play sequences with live FPS/hold adjustments
+
+**Progress:** 7/10 tasks complete (**70%** ⏳)
 
 ---
 
