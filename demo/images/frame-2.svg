@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <!-- Background gradient -->
+  <defs>
+    <radialGradient id="bg2" cx="55%" cy="50%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </radialGradient>
+    <linearGradient id="grid2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.05" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="600" fill="url(#bg2)"/>
+  
+  <!-- Perspective grid - vanishing point RIGHT -->
+  <g stroke="url(#grid2)" stroke-width="2" fill="none">
+    <!-- Horizontal lines converging to right -->
+    <line x1="500" y1="200" x2="800" y2="300" />
+    <line x1="500" y1="250" x2="800" y2="300" />
+    <line x1="500" y1="300" x2="800" y2="300" />
+    <line x1="500" y1="350" x2="800" y2="300" />
+    <line x1="500" y1="400" x2="800" y2="300" />
+    
+    <!-- Vertical lines -->
+    <line x1="100" y1="240" x2="100" y2="360" />
+    <line x1="200" y1="210" x2="200" y2="390" />
+    <line x1="300" y1="180" x2="300" y2="420" />
+    <line x1="400" y1="150" x2="400" y2="450" />
+  </g>
+  
+  <!-- Central shapes (slightly shifted) -->
+  <circle cx="400" cy="300" r="80" fill="#ff6b6b" opacity="0.8"/>
+  <rect x="340" y="240" width="120" height="120" fill="none" stroke="#4ecdc4" stroke-width="4"/>
+  <polygon points="400,220 460,280 400,340 340,280" fill="#ffe66d" opacity="0.7"/>
+  
+  <!-- Text label -->
+  <text x="400" y="500" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle" font-weight="bold">
+    FRAME 2 - RIGHT PERSPECTIVE
+  </text>
+  <text x="400" y="530" font-family="Arial, sans-serif" font-size="16" fill="white" text-anchor="middle" opacity="0.8">
+    Vanishing point: Right
+  </text>
+</svg>

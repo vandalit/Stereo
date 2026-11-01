@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stereo - Frame Player Demo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: white;
+    }
+
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 2.5em;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .subtitle {
+      text-align: center;
+      margin-bottom: 30px;
+      opacity: 0.9;
+      font-size: 1.1em;
+    }
+
+    .canvas-container {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto 30px;
+      background: #000;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .control-group {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .control-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      font-size: 0.9em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .control-group input[type="range"] {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .control-group input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #4ecdc4;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .control-group input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #4ecdc4;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .value-display {
+      text-align: center;
+      margin-top: 8px;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #4ecdc4;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 1em;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .btn-play {
+      background: #4ecdc4;
+      color: #000;
+    }
+
+    .btn-pause {
+      background: #ffe66d;
+      color: #000;
+    }
+
+    .btn-stop {
+      background: #ff6b6b;
+      color: white;
+    }
+
+    .btn-nav {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+
+    .btn-mode {
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      padding: 8px 16px;
+      font-size: 0.9em;
+    }
+
+    .btn-mode.active {
+      background: #4ecdc4;
+      color: #000;
+    }
+
+    .info {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+    }
+
+    .info-item {
+      text-align: center;
+    }
+
+    .info-label {
+      font-size: 0.8em;
+      opacity: 0.7;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .info-value {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #4ecdc4;
+    }
+
+    .instructions {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      line-height: 1.6;
+    }
+
+    .instructions h3 {
+      margin-bottom: 10px;
+      color: #4ecdc4;
+    }
+
+    .instructions ul {
+      list-style-position: inside;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.8em;
+      }
+
+      .controls {
+        grid-template-columns: 1fr;
+      }
+
+      .buttons {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎬 Stereo Frame Player</h1>
+    <p class="subtitle">High-performance visual frame alternation engine</p>
+
+    <div class="canvas-container">
+      <canvas id="canvas" width="800" height="600"></canvas>
+    </div>
+
+    <div class="buttons">
+      <button class="btn-play" onclick="play()">▶ Play</button>
+      <button class="btn-pause" onclick="pause()">⏸ Pause</button>
+      <button class="btn-stop" onclick="stop()">⏹ Stop</button>
+      <button class="btn-nav" onclick="prev()">◀ Previous</button>
+      <button class="btn-nav" onclick="next()">Next ▶</button>
+    </div>
+
+    <div class="controls">
+      <div class="control-group">
+        <label for="fps">FPS (Frames Per Second)</label>
+        <input type="range" id="fps" min="1" max="120" value="60" oninput="updateFPS(this.value)">
+        <div class="value-display" id="fps-value">60</div>
+      </div>
+
+      <div class="control-group">
+        <label for="hold">Hold Frames</label>
+        <input type="range" id="hold" min="1" max="30" value="6" oninput="updateHold(this.value)">
+        <div class="value-display" id="hold-value">6</div>
+      </div>
+
+      <div class="control-group">
+        <label>Effective Frequency</label>
+        <div class="value-display" id="freq-value">10 Hz</div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 20px;">
+      <label style="margin-right: 10px;">Render Mode:</label>
+      <button class="btn-mode active" onclick="setMode('fill')">Fill</button>
+      <button class="btn-mode" onclick="setMode('fit')">Fit</button>
+      <button class="btn-mode" onclick="setMode('contain')">Contain</button>
+    </div>
+
+    <div class="info">
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">Current Frame</div>
+          <div class="info-value" id="current-frame">0</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Total Frames</div>
+          <div class="info-value" id="total-frames">0</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">State</div>
+          <div class="info-value" id="state">Loading</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Frame Changes</div>
+          <div class="info-value" id="frame-changes">0</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="instructions">
+      <h3>🎯 What You're Seeing</h3>
+      <ul>
+        <li><strong>Stereoscopic Effect:</strong> Three frames with different vanishing points create depth illusion when alternating</li>
+        <li><strong>FPS Control:</strong> Display refresh rate (how many times per second the engine ticks)</li>
+        <li><strong>Hold Frames:</strong> How many FPS ticks before switching to next image</li>
+        <li><strong>Effective Frequency:</strong> Actual alternation rate = FPS ÷ Hold (in Hz)</li>
+        <li><strong>Render Modes:</strong> Fill (crop to fit), Fit/Contain (letterbox if needed)</li>
+      </ul>
+    </div>
+
+    <div class="instructions">
+      <h3>💡 Try This</h3>
+      <ul>
+        <li>Set FPS to 60, Hold to 1 for maximum speed (60 Hz)</li>
+        <li>Set FPS to 60, Hold to 10 for stereoscopic effect (6 Hz)</li>
+        <li>Use Previous/Next to manually navigate frames</li>
+        <li>Switch between Fill and Fit modes to see the difference</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Load core modules as ES modules -->
+  <script type="module">
+    // Import all core modules
+    import { Timer } from '../core/Timer.js';
+    import { Sequencer } from '../core/Sequencer.js';
+    import { Loader } from '../core/Loader.js';
+    import { Renderer } from '../core/Renderer.js';
+    import { FrameEngine } from '../core/FrameEngine.js';
+
+    // Make FrameEngine global for inline scripts
+    window.FrameEngine = FrameEngine;
+
+    // Initialize engine
+    const canvas = document.getElementById('canvas');
+    const engine = new FrameEngine(canvas, {
+      fps: 60,
+      hold: 6,
+      mode: 'fill',
+      preloadCount: 3,
+      maxCacheSize: 10
+    });
+
+    // Track frame changes
+    let frameChangeCount = 0;
+
+    // Setup event listeners
+    engine.on('loaded', ({ totalFrames }) => {
+      console.log('Loaded:', totalFrames, 'frames');
+      document.getElementById('total-frames').textContent = totalFrames;
+      document.getElementById('state').textContent = 'Loaded';
+      updateInfo();
+    });
+
+    engine.on('play', () => {
+      console.log('Playing');
+      document.getElementById('state').textContent = 'Playing';
+    });
+
+    engine.on('pause', () => {
+      console.log('Paused');
+      document.getElementById('state').textContent = 'Paused';
+    });
+
+    engine.on('stop', () => {
+      console.log('Stopped');
+      document.getElementById('state').textContent = 'Stopped';
+    });
+
+    engine.on('framechange', ({ index, total }) => {
+      frameChangeCount++;
+      document.getElementById('current-frame').textContent = index + 1;
+      document.getElementById('frame-changes').textContent = frameChangeCount;
+    });
+
+    engine.on('error', ({ message, error }) => {
+      console.error('Error:', message, error);
+    });
+
+    // Load images
+    const images = [
+      './images/frame-1.svg',
+      './images/frame-2.svg',
+      './images/frame-3.svg'
+    ];
+
+    engine.loadSequence(images).then(() => {
+      console.log('Sequence loaded successfully!');
+    }).catch(err => {
+      console.error('Failed to load sequence:', err);
+      document.getElementById('state').textContent = 'Error';
+    });
+
+    // Make engine and functions global
+    window.engine = engine;
+
+    window.play = () => engine.play();
+    window.pause = () => engine.pause();
+    window.stop = () => engine.stop();
+    window.next = () => engine.next();
+    window.prev = () => engine.prev();
+
+    window.updateFPS = (value) => {
+      engine.setFPS(parseInt(value));
+      document.getElementById('fps-value').textContent = value;
+      updateInfo();
+    };
+
+    window.updateHold = (value) => {
+      engine.setHold(parseInt(value));
+      document.getElementById('hold-value').textContent = value;
+      updateInfo();
+    };
+
+    window.setMode = (mode) => {
+      engine.setRenderMode(mode);
+      // Update button states
+      document.querySelectorAll('.btn-mode').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+    };
+
+    function updateInfo() {
+      const state = engine.getState();
+      document.getElementById('freq-value').textContent = 
+        state.effectiveFrequency.toFixed(1) + ' Hz';
+      document.getElementById('current-frame').textContent = state.currentFrame + 1;
+    }
+
+    console.log('Stereo Frame Engine Demo Ready!');
+    console.log('Engine:', engine);
+  </script>
+</body>
+</html>

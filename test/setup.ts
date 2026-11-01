@@ -1,22 +1,43 @@
 // Jest setup file
 // Add global test utilities and mocks here
 
+// Create a proper mock context
+const createMockContext = () => ({
+  drawImage: jest.fn(),
+  clearRect: jest.fn(),
+  fillRect: jest.fn(),
+  scale: jest.fn(),
+  save: jest.fn(),
+  restore: jest.fn(),
+  canvas: {
+    width: 800,
+    height: 600
+  }
+});
+
 // Mock Canvas API for Node.js environment
 global.HTMLCanvasElement = class HTMLCanvasElement {
-  getContext() {
-    return {
-      drawImage: jest.fn(),
-      clearRect: jest.fn(),
-      fillRect: jest.fn(),
-      scale: jest.fn(),
-      save: jest.fn(),
-      restore: jest.fn(),
-      canvas: {
-        width: 800,
-        height: 600
-      }
-    };
+  width = 800;
+  height = 600;
+  style: any = {};
+  
+  getContext(contextType: string, options?: any) {
+    if (contextType === '2d') {
+      const ctx = createMockContext();
+      ctx.canvas = this as any;
+      return ctx;
+    }
+    return null;
   }
+} as any;
+
+// Mock document.createElement to return proper canvas
+const originalCreateElement = document.createElement.bind(document);
+document.createElement = function(tagName: string) {
+  if (tagName === 'canvas') {
+    return new (global.HTMLCanvasElement as any)();
+  }
+  return originalCreateElement(tagName);
 } as any;
 
 // Mock createImageBitmap - returns proper mock with close method
