@@ -1,0 +1,46 @@
+{
+  "name": "stereo",
+  "version": "0.1.0",
+  "description": "High-performance visual frame player for stereoscopy, sprite animation, and experimental VFX",
+  "main": "dist/core/index.js",
+  "types": "dist/core/index.d.ts",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "echo 'ESLint not configured yet'",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "stereoscopy",
+    "frame-player",
+    "animation",
+    "vfx",
+    "canvas",
+    "electron",
+    "web-component"
+  ],
+  "author": "vandalit",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vandalit/stereo"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^26.6.6",
+    "jest": "^30.5.2",
+    "jest-environment-jsdom": "^30.5.2",
+    "ts-jest": "^29.4.15",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "eventemitter3": "^5.0.4"
+  }
+}
