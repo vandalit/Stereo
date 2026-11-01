@@ -173,13 +173,10 @@ body {
 .slider-popup {
   position: fixed;
   bottom: 68px;
-  left: 50%;
-  transform: translateX(-50%);
   display: none;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
   gap: 8px;
-  padding: 8px 12px;
+  padding: 12px 16px;
   background: rgba(10, 10, 20, 0.97);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -192,44 +189,89 @@ body {
 #fpsPopup {
   left: auto;
   right: 180px;
-  transform: none;
 }
 
 /* Position Hold popup near its button */
 #holdPopup {
   left: auto;
   right: 120px;
-  transform: none;
 }
 
 .slider-popup.open {
   display: flex;
 }
 
-.slider-popup label {
-  font-size: 9px;
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.popup-header span:first-child {
+  font-size: 10px;
   letter-spacing: 0.05em;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(180, 170, 255, 0.7);
   text-transform: uppercase;
-  width: 32px;
-  flex-shrink: 0;
+}
+
+.popup-header span:last-child {
+  font-size: 13px;
+  color: rgba(160, 155, 255, 0.95);
+  font-weight: 600;
+  min-width: 32px;
+  text-align: right;
 }
 
 .slider-popup input[type="range"] {
-  flex: 1;
-  height: 16px;
+  width: 100%;
+  height: 20px;
   cursor: pointer;
-  accent-color: #88aaff;
+  -webkit-appearance: none;
+  appearance: none;
   background: transparent;
 }
 
-.slider-popup span {
-  font-size: 10px;
-  color: rgba(160, 155, 255, 0.9);
-  width: 28px;
-  text-align: right;
-  flex-shrink: 0;
-  font-weight: 500;
+.slider-popup input[type="range"]::-webkit-slider-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+}
+
+.slider-popup input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  background: #88aaff;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -5px;
+}
+
+.slider-popup input[type="range"]::-webkit-slider-thumb:hover {
+  background: #a0bfff;
+}
+
+.slider-popup input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+}
+
+.slider-popup input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: #88aaff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.slider-popup input[type="range"]::-moz-range-thumb:hover {
+  background: #a0bfff;
 }
 
 /* Settings Panel */

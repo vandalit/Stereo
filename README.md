@@ -7,6 +7,10 @@
 ![Status: In Development](https://img.shields.io/badge/status-in%20development-yellow)
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue)
 
+<!-- Screenshot: TODO - Ejecutar `npm run electron`, cargar images de docs/sample-images/, y capturar pantalla -->
+<!-- ![Stereo Player v1](docs/screenshot-player-v1.png) -->
+<!-- *Desktop player with 11-button toolbar and fill-mode canvas* -->
+
 ---
 
 ## Features
@@ -169,14 +173,28 @@ npm test -- Timer.test.ts
 
 See [ROADMAP.md](ROADMAP.md) for planned features and progress.
 
-**Current Phase:** Phase 1 - Core Engine Development
+**Current Phase:** Phase 1 - Core Engine & Desktop Player
 
-**Next Up:**
-- ✅ Project setup and tooling
-- 🔄 Timer module implementation
-- ⏳ Sequencer module
-- ⏳ Loader with ImageBitmap
-- ⏳ Canvas renderer
+### Core Engine Progress
+- ✅ Timer module (FPS + hold frames)
+- ✅ Sequencer module (navigation logic)
+- ✅ Loader with ImageBitmap (preloading & caching)
+- ✅ Canvas renderer (fill/fit/center modes)
+- ✅ FrameEngine orchestrator
+- ✅ 142 unit tests passing
+
+### Desktop Player Progress
+- ✅ Single-window player (VLC-style UI)
+- ✅ 11-button toolbar (always visible)
+- ✅ Folder selection & image loading
+- ✅ Play/Pause/Stop/Prev/Next controls
+- ✅ Keyboard shortcuts (Space, Arrows)
+- ✅ FPS & Hold dynamic adjustment
+- ✅ Canvas fill mode with responsive resize
+- ✅ Debounced resize (no lag/freeze)
+- ⏳ Settings panel
+- ⏳ Video recording (FFmpeg integration)
+- ⏳ Thumbnail presets (2 slots)
 
 ---
 

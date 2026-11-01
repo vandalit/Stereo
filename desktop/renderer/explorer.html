@@ -114,6 +114,24 @@
     </div>
   </div>
 
+  <!-- FPS Slider Popup -->
+  <div id="fpsPopup" class="slider-popup" style="display: none;">
+    <div class="popup-header">
+      <span>FPS</span>
+      <span id="fpsValue">60</span>
+    </div>
+    <input type="range" id="fpsSlider" min="1" max="120" value="60" step="1" />
+  </div>
+
+  <!-- Hold Slider Popup -->
+  <div id="holdPopup" class="slider-popup" style="display: none;">
+    <div class="popup-header">
+      <span>Hold Frames</span>
+      <span id="holdValue">6</span>
+    </div>
+    <input type="range" id="holdSlider" min="1" max="60" value="6" step="1" />
+  </div>
+
   <script src="explorer.js"></script>
 </body>
 </html>

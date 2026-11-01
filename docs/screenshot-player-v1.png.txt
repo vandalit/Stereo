@@ -1,0 +1,6 @@
+Placeholder: User provided screenshot shows:
+- Black canvas (no images loaded)
+- "no images loaded" text top left
+- 11 buttons at bottom: Folder, Prev, Play, Next, Stop, Record, 2x thumbnails, FPS, Hold, Settings
+- Dark minimalist UI with low contrast buttons
+- Toolbar properly positioned at bottom

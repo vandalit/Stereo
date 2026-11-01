@@ -20,6 +20,15 @@ class PlayerUI {
   private stopBtn: HTMLButtonElement;
   private playIcon: SVGElement;
   private pauseIcon: SVGElement;
+  private btnFps: HTMLButtonElement;
+  private btnHold: HTMLButtonElement;
+  private fpsPopup: HTMLElement;
+  private holdPopup: HTMLElement;
+  private fpsSlider: HTMLInputElement;
+  private holdSlider: HTMLInputElement;
+  private fpsValue: HTMLElement;
+  private holdValue: HTMLElement;
+  private resizeTimeout: number | null = null;
 
   constructor() {
     this.canvas = document.getElementById('playerCanvas') as HTMLCanvasElement;
@@ -29,8 +38,18 @@ class PlayerUI {
     this.playPauseBtn = document.getElementById('playPauseBtn') as HTMLButtonElement;
     this.btnNext = document.getElementById('btnNext') as HTMLButtonElement;
     this.stopBtn = document.getElementById('stopBtn') as HTMLButtonElement;
+    this.btnFps = document.getElementById('btnFps') as HTMLButtonElement;
+    this.btnHold = document.getElementById('btnHold') as HTMLButtonElement;
     this.playIcon = document.getElementById('playIcon') as any;
     this.pauseIcon = document.getElementById('pauseIcon') as any;
+
+    // Popup elements
+    this.fpsPopup = document.getElementById('fpsPopup')!;
+    this.holdPopup = document.getElementById('holdPopup')!;
+    this.fpsSlider = document.getElementById('fpsSlider') as HTMLInputElement;
+    this.holdSlider = document.getElementById('holdSlider') as HTMLInputElement;
+    this.fpsValue = document.getElementById('fpsValue')!;
+    this.holdValue = document.getElementById('holdValue')!;
 
     this.setupCanvas();
     this.btnFolder.addEventListener('click', () => this.selectFolder());
@@ -38,11 +57,21 @@ class PlayerUI {
     this.stopBtn.addEventListener('click', () => this.stop());
     this.btnPrev.addEventListener('click', () => this.engine?.prev());
     this.btnNext.addEventListener('click', () => this.engine?.next());
+    this.btnFps.addEventListener('click', () => this.toggleFpsPopup());
+    this.btnHold.addEventListener('click', () => this.toggleHoldPopup());
+
+    // Slider listeners
+    this.fpsSlider.addEventListener('input', () => this.onFpsChange());
+    this.holdSlider.addEventListener('input', () => this.onHoldChange());
+
+    // Click outside to close popups
+    document.addEventListener('click', (e) => this.handleClickOutside(e));
     
     document.addEventListener('keydown', (e) => {
       if (e.key === ' ') { e.preventDefault(); this.togglePlay(); }
       else if (e.key === 'ArrowLeft') { e.preventDefault(); this.engine?.prev(); }
       else if (e.key === 'ArrowRight') { e.preventDefault(); this.engine?.next(); }
+      else if (e.key === 'Escape') { this.closeAllPopups(); }
     });
   }
 
@@ -50,12 +79,17 @@ class PlayerUI {
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight - 56;
     window.addEventListener('resize', () => {
-      this.canvas.width = window.innerWidth;
-      this.canvas.height = window.innerHeight - 56;
-      if (this.engine) {
-        const state = this.engine.getState();
-        if (state.totalFrames > 0) this.engine.jumpTo(state.currentFrame);
-      }
+      // Debounce: solo actualizar canvas después de 150ms sin cambios
+      if (this.resizeTimeout) clearTimeout(this.resizeTimeout);
+      this.resizeTimeout = window.setTimeout(() => {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight - 56;
+        if (this.engine) {
+          const state = this.engine.getState();
+          if (state.totalFrames > 0) this.engine.jumpTo(state.currentFrame);
+        }
+        this.resizeTimeout = null;
+      }, 150);
     });
   }
 
@@ -90,6 +124,55 @@ class PlayerUI {
   private updateIcon() {
     this.playIcon.style.display = this.isPlaying ? 'none' : 'block';
     this.pauseIcon.style.display = this.isPlaying ? 'block' : 'none';
+  }
+
+  private toggleFpsPopup() {
+    const isOpen = this.fpsPopup.classList.contains('open');
+    this.closeAllPopups();
+    if (!isOpen) {
+      this.fpsPopup.classList.add('open');
+      this.btnFps.classList.add('active');
+    }
+  }
+
+  private toggleHoldPopup() {
+    const isOpen = this.holdPopup.classList.contains('open');
+    this.closeAllPopups();
+    if (!isOpen) {
+      this.holdPopup.classList.add('open');
+      this.btnHold.classList.add('active');
+    }
+  }
+
+  private closeAllPopups() {
+    this.fpsPopup.classList.remove('open');
+    this.holdPopup.classList.remove('open');
+    this.btnFps.classList.remove('active');
+    this.btnHold.classList.remove('active');
+  }
+
+  private handleClickOutside(e: MouseEvent) {
+    const target = e.target as HTMLElement;
+    if (!this.fpsPopup.contains(target) && !this.btnFps.contains(target) &&
+        !this.holdPopup.contains(target) && !this.btnHold.contains(target)) {
+      this.closeAllPopups();
+    }
+  }
+
+  private onFpsChange() {
+    this.fps = parseInt(this.fpsSlider.value, 10);
+    this.fpsValue.textContent = this.fps.toString();
+    if (this.engine) {
+      this.engine.setFPS(this.fps);
+    }
+  }
+
+  private onHoldChange() {
+    this.hold = parseInt(this.holdSlider.value, 10);
+    this.holdValue.textContent = this.hold.toString();
+    if (this.engine) {
+      this.engine.setHold(this.hold);
+    }
   }
 }
 
