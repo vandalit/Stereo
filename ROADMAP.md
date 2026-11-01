@@ -23,12 +23,12 @@ Stereo follows a **phased development approach**, building from core functionali
 - ✅ TypeScript configuration
 - ✅ Jest testing framework configured
 - ✅ Timer module (FPS + hold frames) - **20/20 tests passing**
+- ✅ Sequencer module (circular navigation) - **33/33 tests passing**
 
 ### In Progress
-- 🔄 Sequencer module (circular navigation)
+- 🔄 Loader module (ImageBitmap preloading)
 
 ### Upcoming
-- ⏳ Loader module (ImageBitmap preloading)
 - ⏳ Renderer module (Canvas with fill behavior)
 - ⏳ FrameEngine orchestrator (integration layer)
 
@@ -36,7 +36,7 @@ Stereo follows a **phased development approach**, building from core functionali
 
 **Demo:** Reproduce 3+ images at adjustable FPS and hold rates
 
-**Progress:** 1/5 core modules complete (20%)
+**Progress:** 2/5 core modules complete (40%)
 
 ---
 
