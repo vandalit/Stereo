@@ -72,8 +72,8 @@ class PlayerUI {
     this.btnSettings = document.getElementById('btnSettings') as HTMLButtonElement;
     
     // Icons
-    this.playIcon = document.getElementById('playIcon') as SVGElement;
-    this.pauseIcon = document.getElementById('pauseIcon') as SVGElement;
+    this.playIcon = document.getElementById('playIcon') as any;
+    this.pauseIcon = document.getElementById('pauseIcon') as any;
     
     // Settings panel sliders
     this.fpsSlider = document.getElementById('fpsSlider') as HTMLInputElement;
