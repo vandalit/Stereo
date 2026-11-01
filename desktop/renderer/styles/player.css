@@ -164,6 +164,53 @@ body {
   flex: 1;
 }
 
+/* Slider Popup */
+.slider-popup {
+  position: absolute;
+  bottom: 60px;
+  display: none;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(10, 10, 20, 0.97);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  z-index: 70;
+  min-width: 200px;
+}
+
+.slider-popup.open {
+  display: flex;
+}
+
+.slider-popup label {
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  width: 32px;
+  flex-shrink: 0;
+}
+
+.slider-popup input[type="range"] {
+  flex: 1;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #88aaff;
+  background: transparent;
+}
+
+.slider-popup span {
+  font-size: 10px;
+  color: rgba(160, 155, 255, 0.9);
+  width: 28px;
+  text-align: right;
+  flex-shrink: 0;
+  font-weight: 500;
+}
+
 /* Settings Panel */
 #settingsPanel {
   position: fixed;

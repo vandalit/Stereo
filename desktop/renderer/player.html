@@ -80,21 +80,30 @@
       </svg>
     </button>
 
-    <button class="tb-btn tb-thumb" id="thumb3" title="Jump to frame 3">
+    <!-- FPS Control -->
+    <button class="tb-btn" id="btnFps" title="FPS">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="3" width="18" height="18" rx="2"/>
-        <circle cx="8.5" cy="8.5" r="1.5"/>
-        <path d="M21 15l-5-5L5 21"/>
+        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
       </svg>
     </button>
+    <div class="slider-popup" id="fpsPopup">
+      <label>fps</label>
+      <input type="range" id="fpsSliderToolbar" min="1" max="120" value="60" />
+      <span id="fpsValueToolbar">60</span>
+    </div>
 
-    <button class="tb-btn tb-thumb" id="thumb4" title="Jump to frame 4">
+    <!-- Hold Control -->
+    <button class="tb-btn" id="btnHold" title="Hold">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="3" width="18" height="18" rx="2"/>
-        <circle cx="8.5" cy="8.5" r="1.5"/>
-        <path d="M21 15l-5-5L5 21"/>
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 6v6l4 2"/>
       </svg>
     </button>
+    <div class="slider-popup" id="holdPopup">
+      <label>hold</label>
+      <input type="range" id="holdSliderToolbar" min="1" max="30" value="6" />
+      <span id="holdValueToolbar">6</span>
+    </div>
 
     <div class="tb-spacer"></div>
 

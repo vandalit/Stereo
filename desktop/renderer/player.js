@@ -58,8 +58,62 @@ class PlayerUI {
     // Quick access thumbnails
     document.getElementById('thumb1')?.addEventListener('click', () => this.jumpTo(0));
     document.getElementById('thumb2')?.addEventListener('click', () => this.jumpTo(1));
-    document.getElementById('thumb3')?.addEventListener('click', () => this.jumpTo(2));
-    document.getElementById('thumb4')?.addEventListener('click', () => this.jumpTo(3));
+
+    // FPS/Hold toolbar controls
+    const btnFps = document.getElementById('btnFps');
+    const fpsPopup = document.getElementById('fpsPopup');
+    const btnHold = document.getElementById('btnHold');
+    const holdPopup = document.getElementById('holdPopup');
+
+    btnFps?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      fpsPopup.classList.toggle('open');
+      holdPopup.classList.remove('open');
+      btnFps.classList.toggle('active');
+      btnHold?.classList.remove('active');
+    });
+
+    btnHold?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      holdPopup.classList.toggle('open');
+      fpsPopup.classList.remove('open');
+      btnHold.classList.toggle('active');
+      btnFps?.classList.remove('active');
+    });
+
+    // Close popups when clicking outside
+    document.addEventListener('click', () => {
+      fpsPopup?.classList.remove('open');
+      holdPopup?.classList.remove('open');
+      btnFps?.classList.remove('active');
+      btnHold?.classList.remove('active');
+    });
+
+    // FPS slider in toolbar
+    const fpsSliderToolbar = document.getElementById('fpsSliderToolbar');
+    const fpsValueToolbar = document.getElementById('fpsValueToolbar');
+    fpsSliderToolbar?.addEventListener('input', (e) => {
+      e.stopPropagation();
+      const fps = parseInt(fpsSliderToolbar.value, 10);
+      fpsValueToolbar.textContent = fps.toString();
+      // Also update main slider
+      this.fpsSlider.value = fps.toString();
+      this.fpsValue.textContent = fps.toString();
+      // TODO: Update engine FPS
+    });
+
+    // Hold slider in toolbar
+    const holdSliderToolbar = document.getElementById('holdSliderToolbar');
+    const holdValueToolbar = document.getElementById('holdValueToolbar');
+    holdSliderToolbar?.addEventListener('input', (e) => {
+      e.stopPropagation();
+      const hold = parseInt(holdSliderToolbar.value, 10);
+      holdValueToolbar.textContent = hold.toString();
+      // Also update main slider
+      this.holdSlider.value = hold.toString();
+      this.holdValue.textContent = hold.toString();
+      // TODO: Update engine hold
+    });
 
     // Settings toggle
     this.btnSettings.addEventListener('click', () => {
@@ -279,8 +333,8 @@ class PlayerUI {
       }
     });
     
-    // Update toolbar quick access thumbnails
-    for (let i = 1; i <= 4; i++) {
+    // Update toolbar quick access thumbnails (only first 2 now)
+    for (let i = 1; i <= 2; i++) {
       const btn = document.getElementById(`thumb${i}`);
       if (btn) {
         if (this.currentIndex === i - 1) {
