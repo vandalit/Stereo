@@ -25,18 +25,20 @@ Stereo follows a **phased development approach**, building from core functionali
 - ✅ Timer module (FPS + hold frames) - **20/20 tests passing**
 - ✅ Sequencer module (circular navigation) - **33/33 tests passing**
 - ✅ Loader module (ImageBitmap + buffering) - **29/29 tests passing**
+- ✅ Renderer module (Canvas rendering) - **25/25 tests passing**
 
 ### In Progress
-- 🔄 Renderer module (Canvas with fill behavior)
+- 🔄 FrameEngine orchestrator (integration layer)
 
 ### Upcoming
-- ⏳ FrameEngine orchestrator (integration layer)
+- ⏳ Integration tests
+- ⏳ Create demo with mock data + screenshots for README
 
 **Target:** Working core that can cycle through images with configurable timing
 
 **Demo:** Reproduce 3+ images at adjustable FPS and hold rates
 
-**Progress:** 3/5 core modules complete (60%)
+**Progress:** 4/5 core modules complete (80%)
 
 ---
 
